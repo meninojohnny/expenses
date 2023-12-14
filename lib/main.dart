@@ -42,11 +42,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   final List<Transaction> _transactions = [
-    // Transaction(id: '1', title: 'Conta de agua', value: 10, date: DateTime.now().subtract(const Duration(days: 1))),
-    // Transaction(id: '1', title: 'Conta de luz', value: 20, date: DateTime.now().subtract(const Duration(days: 2))),
-    // Transaction(id: '1', title: 'Conta de internet', value: 30, date: DateTime.now().subtract(const Duration(days: 3))),
-    // Transaction(id: '1', title: 'Conta de funeraria', value: 40, date: DateTime.now().subtract(const Duration(days: 4))),
-    // Transaction(id: '1', title: 'Conta de veterinario', value: 50, date: DateTime.now().subtract(const Duration(days: 5))),
+    Transaction(id: '1', title: 'Conta de agua', value: 10, date: DateTime.now().subtract(const Duration(days: 1))),
+    Transaction(id: '2', title: 'Conta de luz', value: 20, date: DateTime.now().subtract(const Duration(days: 2))),
+    Transaction(id: '3', title: 'Conta de internet', value: 30, date: DateTime.now().subtract(const Duration(days: 3))),
+    Transaction(id: '4', title: 'Conta de funeraria', value: 40, date: DateTime.now().subtract(const Duration(days: 4))),
+    Transaction(id: '5', title: 'Conta de veterinario', value: 50, date: DateTime.now().subtract(const Duration(days: 5))),
   ];
 
   void addTransaction(String title, double value, DateTime date) {
@@ -60,6 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     setState(() {});
   }
+
+  void _removeTransation(String id) => setState(() {
+    _transactions.removeWhere((tr) => tr.id == id);
+  });
+    
+    
 
   List<Transaction> get _recentTransation {
     return _transactions.where((tr) {
@@ -101,7 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Chart(recentTransations: _recentTransation),
-            TransactionList(transactions: _transactions),
+            TransactionList(transactions: _transactions, onPressed: _removeTransation,),
           ],
         ),
       ),
