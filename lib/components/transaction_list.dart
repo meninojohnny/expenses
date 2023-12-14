@@ -15,9 +15,9 @@ class TransactionList extends StatelessWidget {
       child: transactions.isEmpty 
       ? Column(
         children: [
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           const Text('Nenhuma transação encontrada!!'),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           SizedBox(
             height: 250,
             child: Image.asset(
@@ -31,49 +31,88 @@ class TransactionList extends StatelessWidget {
         itemCount: transactions.length,
         itemBuilder: (context, index) {
         final tr = transactions[index];
-        return Card(child: Row(
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 15,
-                  vertical: 10,
-                ),
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.purple,
-                    width: 2
+        return Card(
+          margin: const EdgeInsets.all(5),
+          elevation: 5,
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Color.fromARGB(255, 108, 15, 108),
+              child: FittedBox(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(
+                    'R\$' + tr.value.toString(),
+                    style: const TextStyle(color:Color.fromARGB(255, 231, 218, 218), fontWeight: FontWeight.bold),
                   ),
-                  // shape: BoxShape.circle  
-                ),
-                child: Text(
-                  'R\$ ${tr.value}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.purple
-                  )
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    tr.title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+            ),
+            title: Column(
+              children: [
+                Text(
+                  tr.title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Text(
-                    DateFormat('d MMM y').format(tr.date),
-                    style: const TextStyle(
-                      color: Colors.grey
-                    ),  
-                  )
-                ],
-              )
-            ],
-          ),);}
+                ),
+                Text(
+                  DateFormat('d MMM y').format(tr.date),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 15
+                  ),  
+                )
+              ],
+            ),
+          ),
+        );
+        // return Card(
+        //   child: Row(
+        //     children: [
+        //       Container(
+        //         margin: const EdgeInsets.symmetric(
+        //           horizontal: 15,
+        //           vertical: 10,
+        //         ),
+        //         padding: const EdgeInsets.all(10),
+        //         decoration: BoxDecoration(
+        //           border: Border.all(
+        //             color: Colors.purple,
+        //             width: 2
+        //           ),
+        //           // shape: BoxShape.circle  
+        //         ),
+        //         child: Text(
+        //           'R\$ ${tr.value}',
+        //           style: const TextStyle(
+        //             fontWeight: FontWeight.bold,
+        //             color: Colors.purple
+        //           )
+        //         ),
+        //       ),
+        //       Column(
+        //         crossAxisAlignment: CrossAxisAlignment.start,
+        //         children: [
+        //           Text(
+        //             tr.title,
+        //             style: const TextStyle(
+        //               fontSize: 16,
+        //               fontWeight: FontWeight.bold,
+        //             ),
+        //           ),
+        //           Text(
+        //             DateFormat('d MMM y').format(tr.date),
+        //             style: const TextStyle(
+        //               color: Colors.grey
+        //             ),  
+        //           )
+        //         ],
+        //       )
+        //     ],
+        //   ),
+        // );
+        }
       ),
     );
   }

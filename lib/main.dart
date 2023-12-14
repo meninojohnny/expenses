@@ -42,32 +42,20 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   final List<Transaction> _transactions = [
-    Transaction(id: '1', title: 'Conta de agua', value: 10, date: DateTime.now().subtract(const Duration(days: 1))),
-    Transaction(id: '1', title: 'Conta de luz', value: 20, date: DateTime.now().subtract(const Duration(days: 2))),
-    Transaction(id: '1', title: 'Conta de internet', value: 30, date: DateTime.now().subtract(const Duration(days: 3))),
-    Transaction(id: '1', title: 'Conta de funeraria', value: 40, date: DateTime.now().subtract(const Duration(days: 4))),
-    Transaction(id: '1', title: 'Conta de veterinario', value: 50, date: DateTime.now().subtract(const Duration(days: 5))),
+    // Transaction(id: '1', title: 'Conta de agua', value: 10, date: DateTime.now().subtract(const Duration(days: 1))),
+    // Transaction(id: '1', title: 'Conta de luz', value: 20, date: DateTime.now().subtract(const Duration(days: 2))),
+    // Transaction(id: '1', title: 'Conta de internet', value: 30, date: DateTime.now().subtract(const Duration(days: 3))),
+    // Transaction(id: '1', title: 'Conta de funeraria', value: 40, date: DateTime.now().subtract(const Duration(days: 4))),
+    // Transaction(id: '1', title: 'Conta de veterinario', value: 50, date: DateTime.now().subtract(const Duration(days: 5))),
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    // gerarLista();
-  }
-
-  void gerarLista() {
-    for (double i = 0;i < 20;i++) {
-      addTransaction('Conta #$i', i);
-    }
-  }
-
-  void addTransaction(String title, double value) {
+  void addTransaction(String title, double value, DateTime date) {
     _transactions.add(
       Transaction(
         id: Random().nextDouble().toString(), 
         title: title, 
         value: value, 
-        date: DateTime.now()
+        date: date
       ),
     );
     setState(() {});
