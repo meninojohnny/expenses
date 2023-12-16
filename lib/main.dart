@@ -39,7 +39,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   final List<Transaction> _transactions = [
     Transaction(id: '1', title: 'Conta de agua', value: 10, date: DateTime.now().subtract(const Duration(days: 1))),
@@ -47,7 +47,31 @@ class _MyHomePageState extends State<MyHomePage> {
     Transaction(id: '3', title: 'Conta de internet', value: 30, date: DateTime.now().subtract(const Duration(days: 3))),
     Transaction(id: '4', title: 'Conta de funeraria', value: 40, date: DateTime.now().subtract(const Duration(days: 4))),
     Transaction(id: '5', title: 'Conta de veterinario', value: 50, date: DateTime.now().subtract(const Duration(days: 5))),
+    Transaction(id: '6', title: 'Conta medica', value: 10, date: DateTime.now().subtract(const Duration(days: 1))),
+    Transaction(id: '7', title: 'Roupas', value: 20, date: DateTime.now().subtract(const Duration(days: 2))),
+    Transaction(id: '8', title: 'Roupa pra gato', value: 30, date: DateTime.now().subtract(const Duration(days: 3))),
+    Transaction(id: '9', title: 'Conta de funeraria', value: 40, date: DateTime.now().subtract(const Duration(days: 4))),
+    Transaction(id: '10', title: 'Conta de veterinario', value: 50, date: DateTime.now().subtract(const Duration(days: 5))),
   ];
+
+  bool _showChart = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
 
   void addTransaction(String title, double value, DateTime date) {
     _transactions.add(
@@ -64,8 +88,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void _removeTransation(String id) => setState(() {
     _transactions.removeWhere((tr) => tr.id == id);
   });
-    
-    
 
   List<Transaction> get _recentTransation {
     return _transactions.where((tr) {
@@ -85,29 +107,63 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Despesas Pessoais', 
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Theme.of(context).primaryColor,
-        actions: [
-          IconButton(
-            onPressed: () => _openTransactionFormModal(context), 
-            icon: const Icon(
-              Icons.add, 
-              color: Colors.white,
-            ),
-          ),
-        ],
+
+    bool isLandScape = MediaQuery.of(context).orientation == Orientation.landscape;
+
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+
+    final appBar = AppBar(
+      title: const Text(
+        'Despesas Pessoais', 
+        style: TextStyle(color: Colors.white),
       ),
+      backgroundColor: Theme.of(context).primaryColor,
+      actions: [
+
+        if (isLandScape)
+        IconButton(
+          onPressed: () {
+            setState(() {
+              _showChart = !_showChart;
+            });
+          }, 
+          icon: Icon(
+            _showChart ? Icons.list : Icons.pie_chart, 
+            color: Colors.white,
+          ),
+        ),
+        IconButton(
+          onPressed: () => _openTransactionFormModal(context), 
+          icon: const Icon(
+            Icons.add, 
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+
+    final avaliableHeight = 
+      mediaQuery.size.height - 
+      appBar.preferredSize.height - 
+      mediaQuery.padding.top;
+
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Chart(recentTransations: _recentTransation),
-            TransactionList(transactions: _transactions, onPressed: _removeTransation,),
+
+            if (_showChart || !isLandScape)
+            SizedBox(
+              height: avaliableHeight * (isLandScape ? .7 : .3),
+              child: Chart(recentTransations: _recentTransation),
+            ),
+
+            if (!_showChart || !isLandScape)
+            SizedBox(
+              height: avaliableHeight * 1,
+              child: TransactionList(transactions: _transactions, onPressed: _removeTransation,)),
           ],
         ),
       ),
